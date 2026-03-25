@@ -206,6 +206,7 @@ def load_orders():
     
     
 def main():
+    print("Bot is running.... ")
     app = ApplicationBuilder().token(TOKEN).build()
 
     app.add_handler(CommandHandler("start", start))
