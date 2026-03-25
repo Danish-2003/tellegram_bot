@@ -218,6 +218,6 @@ def main():
 
 # Start Flask in separate thread
 if __name__ == "__main__":
-    threading.Thread(target=run_flask).start()
+    threading.Thread(target=run_flask, daemon=True).start()
     main()
     
