@@ -2,22 +2,36 @@ import os
 import json
 from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, filters, ContextTypes
-
 from telegram import ReplyKeyboardMarkup, KeyboardButton
+
+
+
 keyboard = [["Black", "Brown"], ["Tan", "Blue"]]
 markup = ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
 
 contact_button = [[KeyboardButton("📞 Share Phone Number", request_contact=True)]]
 contact_markup = ReplyKeyboardMarkup(contact_button, resize_keyboard=True)
 
+
+from flask import Flask
+import threading
+
+app_flask = Flask(__name__)
+
+@app_flask.route("/")
+def home():
+    return "Bot is running!"
+
+def run_flask():
+    port = int(os.environ.get("PORT", 10000))
+    app_flask.run(host="0.0.0.0", port=port)
+
+
 user_data = {}
 
 
-# TOKEN = os.getenv("BOT_TOKEN")
-# ADMIN_ID = int(os.getenv("ADMIN_ID"))
-TOKEN = "8724767851:AAET6QJk_JPx_C_5oeLHyHelBhKRoyq6LnE"
-
-ADMIN_ID = 1713887351
+TOKEN = os.getenv("BOT_TOKEN")
+ADMIN_ID = int(os.getenv("ADMIN_ID"))
 
 
 
@@ -199,10 +213,11 @@ def main():
     app.add_handler(MessageHandler(filters.CONTACT, handle_contact))
     
     print("Bot is running.... ")
-    print("ADMIN_ID:", ADMIN_ID)
     app.run_polling()
 
-if __name__ == "__main__":
-    main()           
 
+# Start Flask in separate thread
+if __name__ == "__main__":
+    threading.Thread(target=run_flask).start()
+    main()
     
